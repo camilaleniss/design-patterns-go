@@ -59,5 +59,3 @@ func main() {
 	Connect(layer2, neuron1)
 	Connect(layer1, layer2)
 }
-
-Explain
