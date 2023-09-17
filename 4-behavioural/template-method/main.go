@@ -1,0 +1,63 @@
+package templatemethod
+
+// Template method
+// A high level blue print for an algorithm to be completed by inheritors
+
+// It's typically just a function, not a struct with a ref to the impl
+// Can still use interfaces
+// Can be functional
+
+// A skleton of an algorithm defined in a function.
+// Function can either use an interface or receive several
+// functions as arguments
+
+import "fmt"
+
+type Game interface {
+	Start()
+	HaveWinner() bool
+	TakeTurn()
+	WinningPlayer() int
+}
+
+// the high-level algorithm
+func PlayGame(g Game) {
+	g.Start()
+	for !g.HaveWinner() {
+		g.TakeTurn()
+	}
+	fmt.Printf("Player %d wins.\n", g.WinningPlayer())
+}
+
+type chess struct {
+	turn, maxTurns, currentPlayer int
+}
+
+func NewGameOfChess() Game {
+	return &chess{1, 10, 0}
+}
+
+// the implementations of the methods
+func (c *chess) Start() {
+	fmt.Println("Starting a game of chess.")
+}
+
+func (c *chess) HaveWinner() bool {
+	return c.turn == c.maxTurns
+}
+
+func (c *chess) TakeTurn() {
+	c.turn++
+	fmt.Printf("Turn %d taken by player %d\n",
+		c.turn, c.currentPlayer)
+	c.currentPlayer = (c.currentPlayer + 1) % 2
+}
+
+func (c *chess) WinningPlayer() int {
+	return c.currentPlayer
+}
+
+func main() {
+	chess := NewGameOfChess()
+	PlayGame(chess)
+}
